@@ -112,6 +112,16 @@ input:focus {
   animation: rotate 1s linear infinite;
 }
 
+.btn-load {
+  width: 125px;
+  white-space: nowrap;
+
+}
+
+.hidden {
+  display: none;
+}
+
 @keyframes rotate {
   0% {
     transform: rotate(0deg);
