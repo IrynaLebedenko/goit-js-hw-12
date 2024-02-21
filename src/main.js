@@ -64,7 +64,7 @@ fetchImageForm.addEventListener('submit', async (event) => {
  try {
     const response = await axios.get(
         // `${baseUrl}${pixabayApiKey}${encodeURIComponent(query)}${image_type}${per_page}`
-        `https://pixabay.com/api/?key=${pixabayApiKey}&q=${encodeURIComponent(query)}&image_type=photo&orientation=horizontal&safesearch=true&per_page=15&page=1`
+        `https://pixabay.com/api/?key=${pixabayApiKey}&q=${encodeURIComponent(query)}&image_type=photo&orientation=horizontal&safesearch=true&page=1&per_page=15`
     );
 
       const data = response.data;
@@ -108,13 +108,14 @@ fetchImageForm.addEventListener('submit', async (event) => {
 });
 
 btnLoadMore.addEventListener('click', async (event) => {
+    page = page++;
       showLoader();
       event.preventDefault(); 
-      page = page+1;
       
       gallery.innerHTML = '';
       const pixabayApiKey = '42400311-c577e995298d386a6e7116ddb';
       query = userInput.value.trim();
+      page = page+1;
       if(!query){
         iziToast.error({
             backgroundColor: '#EF4040',
@@ -128,7 +129,7 @@ btnLoadMore.addEventListener('click', async (event) => {
      try {
         const response = await axios.get(
             
-            `https://pixabay.com/api/?key=${pixabayApiKey}&q=${encodeURIComponent(query)}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=15&page=2`
+            `https://pixabay.com/api/?key=${pixabayApiKey}&q=${encodeURIComponent(query)}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=15`
         );
     
           const data = response.data;
