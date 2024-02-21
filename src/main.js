@@ -97,4 +97,4 @@ fetchImageForm.addEventListener('submit', async (event) => {
     } finally {
       hidingLoader();
     }
-    );
+});
