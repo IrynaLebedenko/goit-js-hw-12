@@ -120,7 +120,6 @@ btnLoadMore.addEventListener('click', async (event) => {
       hideLoadMoreButton();
       event.preventDefault(); 
       
-      gallery.innerHTML = '';
       const pixabayApiKey = '42400311-c577e995298d386a6e7116ddb';
       query = userInput.value.trim();
  
@@ -149,7 +148,7 @@ btnLoadMore.addEventListener('click', async (event) => {
         </li>`;
               })
               .join('');
-          gallery.insertAdjacentHTML('afterbegin', markup);
+              gallery.insertAdjacentHTML('beforeend', markup);
           lightbox.refresh();
 
 // We get the height of one gallery card
@@ -165,6 +164,7 @@ const scrollToNextGroup = () => {
 
 // Call the scrolling function
 scrollToNextGroup();
+
           showLoadingText();
           totalHits = data.totalHits;
           if (totalHits <= per_page * page) {
