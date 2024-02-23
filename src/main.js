@@ -161,7 +161,7 @@ scrollToNextGroup();
             // Show a message about the end of search results
             const endMessage = document.createElement('div');
             endMessage.innerText = "We're sorry, but you've reached the end of search results.";
-            container.appendChild(endMessage); 
+            gallery.appendChild(endMessage); 
             }
             hideLoadMoreButton();
         };
