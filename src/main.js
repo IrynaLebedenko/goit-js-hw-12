@@ -45,7 +45,26 @@ const options = {
 
 const lightbox = new SimpleLightbox('.gallery a', options);
 let query;
+
+function generateMarkup(hit) {
+    return `
+        <li class="gallery-item">
+            <a href="${hit.webformatURL}">
+                <img class="gallery-image" src="${hit.webformatURL}" alt="${hit.tags}">
+            </a>
+            <div class="image-details">
+                <div class="image-text">
+                    <p><b class="image-text-width">Likes: </b>${hit.likes}</p>
+                    <p><b class="image-text-width">Views: </b>${hit.views}</p>
+                    <p><b class="image-text-width">Comments: </b>${hit.comments}</p>
+                    <p><b class="image-text-width">Downloads: </b>${hit.downloads}</p>
+                </div>
+            </div>
+        </li>`;
+};
+
 fetchImageForm.addEventListener('submit', async (event) => {
+    page;
     per_page = 15;
   event.preventDefault(); 
   showLoadingText();
@@ -84,24 +103,7 @@ fetchImageForm.addEventListener('submit', async (event) => {
       
     } else {
         showLoadingText();
-        const markup = data.hits
-        .map(data => {
-            return ` <li class="gallery-item">
-      <a href="${data.webformatURL}">
-        <img class="gallery-image" src="${data.webformatURL}" alt="${data.tags}">
-      </a>
-      <div class="image-details">
-        <div class="image-text">
-        <p><b class="image-text-width">Likes: </b>${data.likes}</p>
-        <p><b class="image-text-width">Views: </b>${data.views}</p>
-        <p><b class="image-text-width">Comments: </b>${data.comments}</p>
-        <p><b class="image-text-width">Downloads: </b>${data.downloads}</p>
-        
-        </div>
-      </div>
-    </li>`;
-          })
-          .join('');
+        const markup = data.hits.map(generateMarkup).join('');
       gallery.insertAdjacentHTML('afterbegin', markup);
       lightbox.refresh();
       showLoadMoreButton();
@@ -116,6 +118,7 @@ fetchImageForm.addEventListener('submit', async (event) => {
 
 btnLoadMore.addEventListener('click', async (event) => {
       page++;
+      gallery.innerHTML = '';
       showLoadingText();
       hideLoadMoreButton();
       event.preventDefault(); 
@@ -131,23 +134,7 @@ btnLoadMore.addEventListener('click', async (event) => {
             const data = response.data;
       
             if (data.hits.length) {
-            const markup = data.hits
-            .map(data => {
-                return ` <li class="gallery-item">
-          <a href="${data.webformatURL}">
-            <img class="gallery-image" src="${data.webformatURL}" alt="${data.tags}">
-          </a>
-          <div class="image-details">
-            <div class="image-text">
-            <p><b class="image-text-width">Likes: </b>${data.likes}</p>
-            <p><b class="image-text-width">Views: </b>${data.views}</p>
-            <p><b class="image-text-width">Comments: </b>${data.comments}</p>
-            <p><b class="image-text-width">Downloads: </b>${data.downloads}</p>
-            
-          </div>
-        </li>`;
-              })
-              .join('');
+                const markup = data.hits.map(generateMarkup).join('');
               gallery.insertAdjacentHTML('beforeend', markup);
           lightbox.refresh();
 
@@ -180,7 +167,8 @@ scrollToNextGroup();
           hideLoadingText();
           if ( totalHits > per_page * page ){
             showLoadMoreButton();
-            
+          } else {
+            hideLoadMoreButton();
           }
         }
     });
