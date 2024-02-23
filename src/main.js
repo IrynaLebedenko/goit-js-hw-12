@@ -104,7 +104,7 @@ fetchImageForm.addEventListener('submit', async (event) => {
     } else {
         showLoadingText();
         const markup = data.hits.map(generateMarkup).join('');
-      gallery.insertAdjacentHTML('afterbegin', markup);
+      gallery.insertAdjacentHTML('beforeend', markup);
       lightbox.refresh();
       showLoadMoreButton();
       }
@@ -137,9 +137,9 @@ btnLoadMore.addEventListener('click', async (event) => {
       
             if (data.hits.length) {
               const markup = data.hits.map(generateMarkup).join('');
-              gallery.insertAdjacentHTML('afterbegin', markup);
+              gallery.insertAdjacentHTML('beforeend', markup);
           lightbox.refresh();
-        //   showLoadMoreButton();
+      showLoadMoreButton();
 
 // We get the height of one gallery card
 const cardHeight = document.querySelector('.gallery-image').getBoundingClientRect().height;
@@ -169,6 +169,8 @@ scrollToNextGroup();
           console.log(error);
         } finally {
             hideLoadingText();
-          showLoadMoreButtonLoadingText();
+            if ( totalHits > per_page * page ){
+                showLoadMoreButton();
+            }
         }
     });
