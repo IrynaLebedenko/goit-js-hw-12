@@ -64,7 +64,7 @@ function generateMarkup(hit) {
 };
 
 fetchImageForm.addEventListener('submit', async (event) => {
-    page;
+    page = 1;
     per_page = 15;
   event.preventDefault(); 
   showLoadingText();
@@ -113,8 +113,10 @@ fetchImageForm.addEventListener('submit', async (event) => {
       console.log(error);
     } finally {
       hideLoadingText();
+    
     }
 });
+
 
 btnLoadMore.addEventListener('click', async (event) => {
       page++;
@@ -134,9 +136,10 @@ btnLoadMore.addEventListener('click', async (event) => {
             const data = response.data;
       
             if (data.hits.length) {
-                const markup = data.hits.map(generateMarkup).join('');
-              gallery.insertAdjacentHTML('beforeend', markup);
+              const markup = data.hits.map(generateMarkup).join('');
+              gallery.insertAdjacentHTML('afterbegin', markup);
           lightbox.refresh();
+        //   showLoadMoreButton();
 
 // We get the height of one gallery card
 const cardHeight = document.querySelector('.gallery-image').getBoundingClientRect().height;
@@ -160,15 +163,12 @@ scrollToNextGroup();
             endMessage.innerText = "We're sorry, but you've reached the end of search results.";
             gallery.appendChild(endMessage); 
             }
+            hideLoadMoreButton();
         };
         } catch(error) {
           console.log(error);
         } finally {
-          hideLoadingText();
-          if ( totalHits > per_page * page ){
-            showLoadMoreButton();
-          } else {
-            hideLoadMoreButton();
-          }
+            hideLoadingText();
+          showLoadMoreButtonLoadingText();
         }
     });
