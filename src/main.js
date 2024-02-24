@@ -61,7 +61,7 @@ function generateMarkup(hit) {
                 </div>
             </div>
         </li>`;
-};
+}
 
 fetchImageForm.addEventListener('submit', async (event) => {
     page = 1;
@@ -102,15 +102,19 @@ fetchImageForm.addEventListener('submit', async (event) => {
       hideLoadMoreButton();
       
     } else {
-        showLoadingText();
+        // showLoadingText();
         const markup = data.hits.map(generateMarkup).join('');
       gallery.insertAdjacentHTML('beforeend', markup);
       lightbox.refresh();
-      showLoadMoreButton();
+      if (data.hits.length < per_page){
+        hideLoadMoreButton();
+      } else {
+        showLoadMoreButton();
+      }
       }
     
     } catch(error) {
-      console.log(error);
+        return 'error';
     } finally {
       hideLoadingText();
     
@@ -120,10 +124,10 @@ fetchImageForm.addEventListener('submit', async (event) => {
 
 btnLoadMore.addEventListener('click', async (event) => {
       page++;
-      gallery.innerHTML = '';
+    //   gallery.innerHTML = '';
       showLoadingText();
       hideLoadMoreButton();
-      event.preventDefault(); 
+    //   event.preventDefault(); 
       
       const pixabayApiKey = '42400311-c577e995298d386a6e7116ddb';
       query = userInput.value.trim();
@@ -139,7 +143,12 @@ btnLoadMore.addEventListener('click', async (event) => {
               const markup = data.hits.map(generateMarkup).join('');
               gallery.insertAdjacentHTML('beforeend', markup);
           lightbox.refresh();
-      showLoadMoreButton();
+          if (data.hits.length < per_page) {
+            hideLoadMoreButton();
+          } else {
+            showLoadMoreButton();
+          }
+    //   showLoadMoreButton();
 
 // We get the height of one gallery card
 const cardHeight = document.querySelector('.gallery-image').getBoundingClientRect().height;
@@ -150,27 +159,26 @@ const scrollToNextGroup = () => {
         top: 2 * cardHeight,
         behavior: 'smooth' 
     });
-};
+}
 
 // Call the scrolling function
 scrollToNextGroup();
 
-          showLoadingText();
+         showLoadingText();
           totalHits = data.totalHits;
           if (totalHits <= per_page * page) {
             // Show a message about the end of search results
             const endMessage = document.createElement('div');
             endMessage.innerText = "We're sorry, but you've reached the end of search results.";
             gallery.appendChild(endMessage); 
-            }
             hideLoadMoreButton();
-        };
+          }
+           
+        }
+        
         } catch(error) {
-          console.log(error);
+          return 'error';
         } finally {
             hideLoadingText();
-            if ( totalHits > per_page * page ){
-                showLoadMoreButton();
-            }
         }
     });
